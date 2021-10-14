@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UsersClient interface {
-	CreteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
+	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
 	DeleteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
 	GetUsers(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
 }
@@ -35,9 +35,9 @@ func NewUsersClient(cc grpc.ClientConnInterface) UsersClient {
 	return &usersClient{cc}
 }
 
-func (c *usersClient) CreteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error) {
+func (c *usersClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error) {
 	out := new(UserState)
-	err := c.cc.Invoke(ctx, "/users.Users/CreteUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/users.Users/CreateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *usersClient) GetUsers(ctx context.Context, in *User, opts ...grpc.CallO
 // All implementations must embed UnimplementedUsersServer
 // for forward compatibility
 type UsersServer interface {
-	CreteUser(context.Context, *User) (*UserState, error)
+	CreateUser(context.Context, *User) (*UserState, error)
 	DeleteUser(context.Context, *User) (*UserState, error)
 	GetUsers(context.Context, *User) (*UserState, error)
 	mustEmbedUnimplementedUsersServer()
@@ -76,8 +76,8 @@ type UsersServer interface {
 type UnimplementedUsersServer struct {
 }
 
-func (UnimplementedUsersServer) CreteUser(context.Context, *User) (*UserState, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreteUser not implemented")
+func (UnimplementedUsersServer) CreateUser(context.Context, *User) (*UserState, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedUsersServer) DeleteUser(context.Context, *User) (*UserState, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
@@ -98,20 +98,20 @@ func RegisterUsersServer(s grpc.ServiceRegistrar, srv UsersServer) {
 	s.RegisterService(&Users_ServiceDesc, srv)
 }
 
-func _Users_CreteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Users_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(User)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UsersServer).CreteUser(ctx, in)
+		return srv.(UsersServer).CreateUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/users.Users/CreteUser",
+		FullMethod: "/users.Users/CreateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UsersServer).CreteUser(ctx, req.(*User))
+		return srv.(UsersServer).CreateUser(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -160,8 +160,8 @@ var Users_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UsersServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreteUser",
-			Handler:    _Users_CreteUser_Handler,
+			MethodName: "CreateUser",
+			Handler:    _Users_CreateUser_Handler,
 		},
 		{
 			MethodName: "DeleteUser",

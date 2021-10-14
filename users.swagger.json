@@ -110,7 +110,7 @@
         ]
       },
       "post": {
-        "operationId": "Users_CreteUser",
+        "operationId": "Users_CreateUser",
         "responses": {
           "200": {
             "description": "A successful response.",
