@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type UsersClient interface {
 	CreteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
 	DeleteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
+	GetUsers(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
 }
 
 type usersClient struct {
@@ -52,12 +53,22 @@ func (c *usersClient) DeleteUser(ctx context.Context, in *User, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *usersClient) GetUsers(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error) {
+	out := new(UserState)
+	err := c.cc.Invoke(ctx, "/users.Users/GetUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsersServer is the server API for Users service.
 // All implementations must embed UnimplementedUsersServer
 // for forward compatibility
 type UsersServer interface {
 	CreteUser(context.Context, *User) (*UserState, error)
 	DeleteUser(context.Context, *User) (*UserState, error)
+	GetUsers(context.Context, *User) (*UserState, error)
 	mustEmbedUnimplementedUsersServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedUsersServer) CreteUser(context.Context, *User) (*UserState, e
 }
 func (UnimplementedUsersServer) DeleteUser(context.Context, *User) (*UserState, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (UnimplementedUsersServer) GetUsers(context.Context, *User) (*UserState, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
 }
 func (UnimplementedUsersServer) mustEmbedUnimplementedUsersServer() {}
 
@@ -120,6 +134,24 @@ func _Users_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Users_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServer).GetUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/users.Users/GetUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServer).GetUsers(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Users_ServiceDesc is the grpc.ServiceDesc for Users service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var Users_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUser",
 			Handler:    _Users_DeleteUser_Handler,
+		},
+		{
+			MethodName: "GetUsers",
+			Handler:    _Users_GetUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

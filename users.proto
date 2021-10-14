@@ -18,6 +18,12 @@ service Users {
       delete: "/users"
     };
   }
+
+  rpc GetUsers (User) returns (UserState) {
+    option (google.api.http) = {
+      get: "/users"
+    };
+  }
 }
 
 message User {
