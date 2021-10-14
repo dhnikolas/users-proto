@@ -1,0 +1,32 @@
+syntax = "proto3";
+option go_package="./;users";
+package users;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+
+service Users {
+  rpc CreteUser (User) returns (UserState) {
+    option (google.api.http) = {
+      post: "/users"
+      body: "*"
+    };
+  }
+
+  rpc DeleteUser (User) returns (UserState) {
+    option (google.api.http) = {
+      delete: "/users"
+    };
+  }
+}
+
+message User {
+  string Email = 1  [(validate.rules).string.email = true, json_name="email"];
+  string FirstName = 2 [json_name="first_name"];
+  string LastName = 3 [json_name="last_name"];
+  string password = 4 [json_name="password"];
+}
+
+message UserState {
+  bool Success = 1;
+}
