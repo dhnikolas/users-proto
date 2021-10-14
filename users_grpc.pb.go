@@ -22,8 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UsersClient interface {
+	//Создание пользователя
 	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
+	//Удаление пользователя
 	DeleteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
+	//Получение списка пользователей
 	GetUsers(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserState, error)
 }
 
@@ -66,8 +69,11 @@ func (c *usersClient) GetUsers(ctx context.Context, in *User, opts ...grpc.CallO
 // All implementations must embed UnimplementedUsersServer
 // for forward compatibility
 type UsersServer interface {
+	//Создание пользователя
 	CreateUser(context.Context, *User) (*UserState, error)
+	//Удаление пользователя
 	DeleteUser(context.Context, *User) (*UserState, error)
+	//Получение списка пользователей
 	GetUsers(context.Context, *User) (*UserState, error)
 	mustEmbedUnimplementedUsersServer()
 }

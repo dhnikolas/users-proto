@@ -4,8 +4,11 @@ package users;
 
 import "validate/validate.proto";
 import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
 
 service Users {
+  //Создание пользователя
   rpc CreateUser (User) returns (UserState) {
     option (google.api.http) = {
       post: "/users"
@@ -13,12 +16,14 @@ service Users {
     };
   }
 
+  //Удаление пользователя
   rpc DeleteUser (User) returns (UserState) {
     option (google.api.http) = {
       delete: "/users"
     };
   }
 
+  //Получение списка пользователей
   rpc GetUsers (User) returns (UserState) {
     option (google.api.http) = {
       get: "/users"
@@ -27,12 +32,35 @@ service Users {
 }
 
 message User {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      title: "User object"
+      description: "full object for user"
+      required: ["email"]
+    }
+  };
   string Email = 1  [(validate.rules).string.email = true, json_name="email"];
   string FirstName = 2 [json_name="first_name"];
   string LastName = 3 [json_name="last_name"];
+  //Пароль в открытом виде
   string password = 4 [json_name="password"];
 }
 
 message UserState {
   bool Success = 1;
 }
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Service users example"
+    version: "1.0"
+    contact: {
+      name: "Nikolai"
+      url: "https://github.com/dhnikolas"
+      email: "dhnikolas@gmail.com"
+    };
+  };
+  schemes: [HTTP,HTTPS]
+  consumes: "application/json"
+  produces: "application/json"
+};

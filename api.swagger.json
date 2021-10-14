@@ -1,13 +1,22 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "users.proto",
-    "version": "version not set"
+    "title": "Service users example",
+    "version": "1.0",
+    "contact": {
+      "name": "Nikolai",
+      "url": "https://github.com/dhnikolas",
+      "email": "dhnikolas@gmail.com"
+    }
   },
   "tags": [
     {
       "name": "Users"
     }
+  ],
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -18,6 +27,7 @@
   "paths": {
     "/users": {
       "get": {
+        "summary": "Получение списка пользователей",
         "operationId": "Users_GetUsers",
         "responses": {
           "200": {
@@ -54,6 +64,7 @@
           },
           {
             "name": "password",
+            "description": "Пароль в открытом виде.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -64,6 +75,7 @@
         ]
       },
       "delete": {
+        "summary": "Удаление пользователя",
         "operationId": "Users_DeleteUser",
         "responses": {
           "200": {
@@ -100,6 +112,7 @@
           },
           {
             "name": "password",
+            "description": "Пароль в открытом виде.",
             "in": "query",
             "required": false,
             "type": "string"
@@ -110,6 +123,7 @@
         ]
       },
       "post": {
+        "summary": "Создание пользователя",
         "operationId": "Users_CreateUser",
         "responses": {
           "200": {
@@ -182,9 +196,15 @@
           "type": "string"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "title": "Пароль в открытом виде"
         }
-      }
+      },
+      "description": "full object for user",
+      "title": "User object",
+      "required": [
+        "email"
+      ]
     },
     "usersUserState": {
       "type": "object",
